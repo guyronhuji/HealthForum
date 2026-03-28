@@ -1,11 +1,22 @@
----
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="refresh" content="0; url=/en/" />
+    <title>Redirecting...</title>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+    <script>
+      const langs = Array.isArray(navigator.languages) ? navigator.languages : [navigator.language];
+      const first = (langs[0] || '').toLowerCase();
+      let target = '/en/';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
----
+      if (first.startsWith('he')) target = '/he/';
+      if (first.startsWith('ar')) target = '/ar/';
 
-<Layout>
-	<Welcome />
-</Layout>
+      window.location.replace(target);
+    </script>
+  </body>
+</html>

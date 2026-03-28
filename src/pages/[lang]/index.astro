@@ -1,0 +1,96 @@
+---
+import { getCollection, render } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { alternateLinks, navItems } from '../../lib/content';
+import { isLocale, supportedLocales, type LocaleCode } from '../../lib/site';
+
+export async function getStaticPaths() {
+  return supportedLocales.map((lang) => ({ params: { lang } }));
+}
+
+const langParam = Astro.params.lang;
+
+if (!isLocale(langParam)) {
+  throw new Error('Unsupported locale');
+}
+
+const lang = langParam as LocaleCode;
+const allPages = await getCollection('pages');
+const home = allPages.find(
+  (entry) => entry.data.lang === lang && entry.data.pageSlug === 'home' && !entry.data.draft,
+);
+
+if (!home) {
+  throw new Error(`Missing home page for language: ${lang}`);
+}
+
+const { Content } = await render(home);
+const navigation = navItems(allPages, lang);
+const alternates = alternateLinks(allPages, 'home');
+---
+
+<SiteLayout
+  lang={lang}
+  title={home.data.title}
+  description={home.data.description}
+  navItems={navigation}
+  currentSlug="home"
+  alternateLinks={alternates}
+>
+  <article class="page">
+    <section class="hero">
+      <div class="hero-grid">
+        <div>
+          <p class="kicker">{home.data.heroKicker}</p>
+          <h1>{home.data.heroHeading}</h1>
+          <p>{home.data.heroBody}</p>
+
+          <div class="hero-actions">
+            <a href={home.data.secondaryCta.href}>{home.data.secondaryCta.label}</a>
+          </div>
+        </div>
+
+        <div class="stats">
+          {
+            home.data.stats.map((stat) => (
+              <article class="stat-item">
+                <p class="stat-value">{stat.value}</p>
+                <p class="stat-label">{stat.label}</p>
+                {stat.source && <p class="stat-source">{stat.source}</p>}
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>{home.data.title}</h2>
+      <div class="highlights">
+        {
+          home.data.highlights.map((item) => (
+            <article class="highlight">
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>{home.data.partnersTitle}</h2>
+      <ul class="partner-list">
+        {
+          home.data.partners.map((partner) => <li>{partner}</li>)
+        }
+      </ul>
+    </section>
+
+    <section class="markdown">
+      <Content />
+    </section>
+
+    <p class="source-note">{home.data.sourceNote} · {home.data.lastUpdated}</p>
+  </article>
+</SiteLayout>

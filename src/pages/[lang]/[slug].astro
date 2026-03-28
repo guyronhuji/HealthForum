@@ -1,0 +1,122 @@
+---
+import { getCollection, render } from 'astro:content';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { alternateLinks, navItems } from '../../lib/content';
+import { isLocale, type LocaleCode } from '../../lib/site';
+
+export async function getStaticPaths() {
+  const pages = await getCollection('pages', ({ data }) => !data.draft && data.pageSlug !== 'home');
+
+  return pages.map((entry) => ({
+    params: {
+      lang: entry.data.lang,
+      slug: entry.data.pageSlug,
+    },
+  }));
+}
+
+const langParam = Astro.params.lang;
+const slugParam = Astro.params.slug;
+
+if (!isLocale(langParam) || !slugParam) {
+  throw new Error('Invalid route');
+}
+
+const lang = langParam as LocaleCode;
+const allPages = await getCollection('pages');
+const page = allPages.find(
+  (entry) => entry.data.lang === lang && entry.data.pageSlug === slugParam && !entry.data.draft,
+);
+
+if (!page) {
+  throw new Error(`Missing page for ${lang}/${slugParam}`);
+}
+
+const { Content } = await render(page);
+const navigation = navItems(allPages, lang);
+const alternates = alternateLinks(allPages, page.data.pageSlug);
+---
+
+<SiteLayout
+  lang={lang}
+  title={page.data.title}
+  description={page.data.description}
+  navItems={navigation}
+  currentSlug={page.data.pageSlug}
+  alternateLinks={alternates}
+>
+  <article class="page">
+    <section class="hero">
+      <p class="kicker">{page.data.heroKicker}</p>
+      <h1 class="page-title">{page.data.heroHeading}</h1>
+      <p>{page.data.heroBody}</p>
+      <div class="hero-actions">
+        <a href={page.data.primaryCta.href}>{page.data.primaryCta.label}</a>
+        <a href={page.data.secondaryCta.href}>{page.data.secondaryCta.label}</a>
+      </div>
+    </section>
+
+    <section class="block">
+      <h2>{page.data.title}</h2>
+      <div class="highlights">
+        {
+          page.data.highlights.map((item) => (
+            <article class="highlight">
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    {
+      page.data.updateSeries && page.data.updateSeries.length > 0 && (
+        <section class="block updates">
+          <h2>{page.data.updatesChartTitle ?? 'Updates Charts'}</h2>
+          {page.data.updatesChartSubtitle && <p>{page.data.updatesChartSubtitle}</p>}
+
+          <div class="update-bars">
+            {page.data.updateSeries.map((item) => (
+              <article class="update-row">
+                <h3>{item.label}</h3>
+                <div class="bar-track">
+                  <span class="bar-east" style={`--bar:${item.eastValue}%`}>
+                    {item.eastLabel ?? `East ${item.eastValue}%`}
+                  </span>
+                </div>
+                <div class="bar-track">
+                  <span class="bar-west" style={`--bar:${item.westValue}%`}>
+                    {item.westLabel ?? `West ${item.westValue}%`}
+                  </span>
+                </div>
+                {item.note && <p class="update-note">{item.note}</p>}
+              </article>
+            ))}
+          </div>
+
+          {page.data.updateTimeline && page.data.updateTimeline.length > 0 && (
+            <div class="timeline-block">
+              <h3>{page.data.updatesTimelineTitle ?? 'Timeline'}</h3>
+              <ol class="timeline-list">
+                {page.data.updateTimeline.map((item) => (
+                  <li>
+                    <p class="timeline-date">{item.date}</p>
+                    <p class="timeline-title">{item.title}</p>
+                    <p>{item.summary}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
+        </section>
+      )
+    }
+
+    <section class="markdown">
+      <Content />
+    </section>
+
+    <p class="source-note">{page.data.sourceNote} · {page.data.lastUpdated}</p>
+  </article>
+</SiteLayout>

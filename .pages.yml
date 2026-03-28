@@ -1,0 +1,143 @@
+media:
+  input: public/media
+  output: /media
+
+content:
+  - name: pages
+    label: Multilingual Pages
+    type: collection
+    path: src/content/pages
+    subfolders: true
+    view:
+      fields: [lang, pageSlug, title, lastUpdated]
+      primary: title
+      sort: [lang, pageSlug]
+    fields:
+      - name: lang
+        label: Language
+        type: select
+        required: true
+        options:
+          values:
+            - label: English
+              value: en
+            - label: Hebrew
+              value: he
+            - label: Arabic
+              value: ar
+
+      - name: pageSlug
+        label: Page Slug
+        type: select
+        required: true
+        options:
+          values:
+            - label: Home
+              value: home
+            - label: About
+              value: about
+            - label: Reports
+              value: reports
+            - label: Affiliate Links
+              value: affiliate-links
+
+      - name: title
+        label: Page Title
+        type: string
+        required: true
+
+      - name: navLabel
+        label: Navigation Label
+        type: string
+        required: true
+
+      - name: description
+        label: SEO Description
+        type: text
+        required: true
+
+      - name: heroKicker
+        label: Hero Kicker
+        type: string
+
+      - name: heroHeading
+        label: Hero Heading
+        type: string
+        required: true
+
+      - name: heroBody
+        label: Hero Body
+        type: text
+        required: true
+
+      - name: primaryCta
+        label: Primary CTA
+        type: object
+        fields:
+          - name: label
+            type: string
+            required: true
+          - name: href
+            type: string
+            required: true
+
+      - name: secondaryCta
+        label: Secondary CTA
+        type: object
+        fields:
+          - name: label
+            type: string
+            required: true
+          - name: href
+            type: string
+            required: true
+
+      - name: stats
+        label: Hero Stats
+        type: object
+        list: true
+        fields:
+          - name: value
+            type: string
+            required: true
+          - name: label
+            type: string
+            required: true
+          - name: source
+            type: string
+
+      - name: highlights
+        label: Highlight Cards
+        type: object
+        list: true
+        fields:
+          - name: title
+            type: string
+            required: true
+          - name: body
+            type: text
+            required: true
+
+      - name: partnersTitle
+        label: Partners Section Title
+        type: string
+        required: true
+
+      - name: partners
+        label: Partners / Model Points
+        type: string
+        list: true
+
+      - name: sourceNote
+        label: Source Note
+        type: text
+        required: true
+
+      - name: lastUpdated
+        label: Last Updated
+        type: string
+        required: true
+
+      - name: body
+        label: Body
+        type: rich-text

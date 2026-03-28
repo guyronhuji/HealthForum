@@ -1,46 +1,69 @@
-# Astro Starter Kit: Basics
+# Forum for Health Equality in East Jerusalem
 
-```sh
-npm create astro@latest -- --template basics
+Multilingual Astro website scaffold for **הפורום לשוויון בבריאות במזרח ירושלים** with:
+
+- Astro static site architecture
+- Trilingual content (`en`, `he`, `ar`)
+- Pages CMS configuration (`.pages.yml`)
+- GitHub Pages deployment workflow (`.github/workflows/deploy.yml`)
+
+## Local development
+
+```bash
+npm install
+npm run dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Build test:
 
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
-
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+```bash
+npm run build
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Content model
 
-## 🧞 Commands
+Content is stored in markdown files under:
 
-All commands are run from the root of the project, from a terminal:
+- `src/content/pages/en/*.md`
+- `src/content/pages/he/*.md`
+- `src/content/pages/ar/*.md`
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Each entry uses shared frontmatter fields (hero, CTA, stats, highlights, source note) and markdown body.
 
-## 👀 Want to learn more?
+Routes:
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- `/` auto-detects browser language and redirects to `/he/`, `/ar/`, or `/en/` (fallback)
+- `/{lang}/` homepage
+- `/{lang}/about/`
+- `/{lang}/reports/`
+- `/{lang}/affiliate-links/`
+
+## Pages CMS
+
+This repo includes `.pages.yml` for Pages CMS. After connecting the GitHub repo to Pages CMS, editors can update structured frontmatter and rich-text body for all languages.
+
+Media uploads are configured to:
+
+- input: `public/media`
+- output: `/media`
+
+## GitHub Pages deployment
+
+The workflow in `.github/workflows/deploy.yml` builds on pushes to `main` and deploys `dist/` to GitHub Pages.
+
+`astro.config.mjs` auto-sets `site` and `base` during GitHub Actions using repository environment variables.
+
+## Design direction in this scaffold
+
+- Editorial, civic visual language with warm neutrals and teal accents.
+- Distinct typography per script (Latin, Hebrew, Arabic).
+- Content-first layout with clear indicators, advocacy highlights, and source visibility.
+- Full RTL support for Hebrew and Arabic.
+
+## Source references used for initial content
+
+- [Forum 2025 data report (Hebrew PDF)](https://wac-maan.org.il/wp-content/uploads/2025/10/%D7%A4%D7%95%D7%A8%D7%95%D7%9D-%D7%91%D7%A8%D7%99%D7%90%D7%95%D7%AA-%D7%91%D7%99%D7%A8%D7%95%D7%A9%D7%9C%D7%99%D7%9D-%D7%94%D7%9E%D7%96%D7%A8%D7%97%D7%99%D7%AA-%D7%A0%D7%AA%D7%95%D7%A0%D7%99-%D7%91%D7%A8%D7%99%D7%90%D7%95%D7%AA-20102025.pdf)
+- [ACRI English summary](https://www.english.acri.org.il/post/more-supervision-needed-for-health-clinics-in-east-jerusalem)
+- [JICC Public Health (English)](https://jicc.org.il/projects/public-health/)
+- [JICC Public Health (Hebrew)](https://jicc.org.il/he/project-health-hebrew/)
+- [WAC-MAAN update page (Hebrew)](https://wac-maan.org.il/east-jerusalem-35/)

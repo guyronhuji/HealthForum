@@ -1,0 +1,84 @@
+---
+import '../styles/global.css';
+import { locales, type LocaleCode } from '../lib/site';
+
+interface NavItem {
+  slug: string;
+  label: string;
+  href: string;
+}
+
+interface AlternateLink {
+  lang: LocaleCode;
+  href: string;
+}
+
+interface Props {
+  lang: LocaleCode;
+  title: string;
+  description: string;
+  navItems: NavItem[];
+  currentSlug: string;
+  alternateLinks: AlternateLink[];
+}
+
+const { lang, title, description, navItems, currentSlug, alternateLinks } = Astro.props;
+const locale = locales[lang];
+---
+
+<!doctype html>
+<html lang={lang} dir={locale.dir}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Heebo:wght@400;500;700&family=Noto+Naskh+Arabic:wght@500;700&family=Public+Sans:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>{title}</title>
+  </head>
+  <body class={`lang-${lang}`}>
+    <div class="backdrop" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href={`/${lang}/`}>
+        <span class="brand-mark">{locale.brandMark}</span>
+        <span>{locale.footer}</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        {
+          navItems.map((item) => (
+            <a href={item.href} data-active={item.slug === currentSlug ? 'true' : 'false'}>
+              {item.label}
+            </a>
+          ))
+        }
+      </nav>
+
+      <div class="language-switch" aria-label={locale.nav.language}>
+        {
+          alternateLinks.map((item) => (
+            <a href={item.href} data-active={item.lang === lang ? 'true' : 'false'}>
+              {locales[item.lang].nativeLabel}
+            </a>
+          ))
+        }
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <p>{locale.footer}</p>
+      <p>{new Date().getFullYear()} · Astro + Pages CMS + GitHub Pages</p>
+    </footer>
+  </body>
+</html>
