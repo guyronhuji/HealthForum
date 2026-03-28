@@ -1,26 +1,26 @@
----
-const base = import.meta.env.BASE_URL ?? '/';
----
-
 <!doctype html>
-<html lang="en" data-base={base}>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="refresh" content={`0; url=${base}en/`} />
+    <meta http-equiv="refresh" content="0; url=en/" />
     <title>Redirecting...</title>
   </head>
   <body>
     <p>Redirecting...</p>
     <script>
-      const base = document.documentElement.dataset.base || '/';
       const langs = Array.isArray(navigator.languages) ? navigator.languages : [navigator.language];
       const first = (langs[0] || '').toLowerCase();
-      let target = `${base}en/`;
+      const pathname = window.location.pathname.endsWith('/')
+        ? window.location.pathname
+        : `${window.location.pathname}/`;
+      const base = `${window.location.origin}${pathname}`;
 
-      if (first.startsWith('he')) target = `${base}he/`;
-      if (first.startsWith('ar')) target = `${base}ar/`;
+      let langPath = 'en/';
+      if (first.startsWith('he')) langPath = 'he/';
+      if (first.startsWith('ar')) langPath = 'ar/';
 
+      const target = new URL(langPath, base).toString();
       window.location.replace(target);
     </script>
   </body>
