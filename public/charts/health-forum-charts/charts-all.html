@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Equity in East Jerusalem — Data Visualizations</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Public+Sans:wght@400;500;600;700&display=swap');
+
+  :root {
+    --sand-1: #f5edd6;
+    --sand-2: #ecdcb5;
+    --ink: #1a2e3b;
+    --ink-soft: #556a75;
+    --teal: #1a8a8a;
+    --teal-dark: #0e6b6e;
+    --teal-light: #e0f0ef;
+    --franchise: #2978b5;
+    --direct: #d4563a;
+    --gap-highlight: #f0c040;
+    --surface: #faf8f2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Public Sans', sans-serif;
+    background: var(--surface);
+    color: var(--ink);
+    padding: 2rem;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 2.2rem;
+    color: var(--ink);
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .charts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .chart-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.75rem;
+    border: 1px solid color-mix(in srgb, var(--teal) 20%, var(--sand-1));
+  }
+
+  .chart-card.full-width {
+    grid-column: 1 / -1;
+  }
+
+  .chart-card h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.3rem;
+    color: var(--ink);
+    margin-bottom: 0.25rem;
+  }
+
+  .chart-card .chart-desc {
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+  }
+
+  .chart-card .stat-callout {
+    display: inline-block;
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    font-weight: 700;
+    font-size: 0.85rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    margin-bottom: 1rem;
+  }
+
+  .chart-container {
+    position: relative;
+    width: 100%;
+  }
+
+  .legend-row {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    color: var(--ink-soft);
+  }
+
+  .legend-row span::before {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  .legend-row .direct::before { background: var(--direct); }
+  .legend-row .franchise::before { background: var(--franchise); }
+
+  /* Gap bar chart */
+  .gap-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    margin-top: 1rem;
+  }
+
+  .gap-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .gap-label {
+    width: 160px;
+    font-size: 0.8rem;
+    color: var(--ink);
+    text-align: right;
+    flex-shrink: 0;
+    line-height: 1.3;
+  }
+
+  .gap-track {
+    flex: 1;
+    height: 36px;
+    background: var(--teal-light);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gap-fill-direct {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--direct);
+    border-radius: 8px 0 0 8px;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: white;
+  }
+
+  .gap-fill-franchise {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: var(--franchise);
+    border-radius: 8px 0 0 8px;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: white;
+  }
+
+  .gap-multiplier {
+    width: 50px;
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--teal-dark);
+    flex-shrink: 0;
+  }
+
+  /* Funnel */
+  .funnel-container {
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+
+  .funnel-col {
+    text-align: center;
+    flex: 1;
+    max-width: 260px;
+  }
+
+  .funnel-col h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .funnel-step {
+    margin-bottom: 0.5rem;
+    position: relative;
+  }
+
+  .funnel-bar {
+    height: 44px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin: 0 auto;
+    transition: width 0.8s ease;
+  }
+
+  .funnel-step-label {
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    margin-top: 4px;
+  }
+
+  .funnel-arrow {
+    color: var(--ink-soft);
+    font-size: 1.2rem;
+    margin: 0.25rem 0;
+  }
+
+  @media (max-width: 768px) {
+    .charts-grid { grid-template-columns: 1fr; }
+    .gap-label { width: 120px; font-size: 0.75rem; }
+    .funnel-container { flex-direction: column; align-items: center; }
+  }
+
+  .source-note {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--ink-soft);
+    margin-top: 2.5rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>
+</head>
+<body>
+
+<h1>The Gap in Numbers</h1>
+<p class="subtitle">Health service rates per 10,000 insured — directly operated clinics vs. franchise clinics in East Jerusalem</p>
+
+<div class="charts-grid">
+
+  <!-- CHART 1: ER Referrals Over Time -->
+  <div class="chart-card">
+    <h2>ER Referrals — Adults</h2>
+    <p class="chart-desc">Adults in franchise clinics are referred to the ER at 3–4× the rate of those in directly operated clinics.</p>
+    <span class="stat-callout">Avg. 3.3× gap</span>
+    <div class="chart-container">
+      <canvas id="erAdults"></canvas>
+    </div>
+  </div>
+
+  <!-- CHART 2: ER Referrals Minors -->
+  <div class="chart-card">
+    <h2>ER Referrals — Children</h2>
+    <p class="chart-desc">Children in franchise clinics are sent to the ER at 4× the rate, suggesting primary care cannot handle routine pediatric cases.</p>
+    <span class="stat-callout">Avg. 4.1× gap</span>
+    <div class="chart-container">
+      <canvas id="erMinors"></canvas>
+    </div>
+  </div>
+
+  <!-- CHART 3: Speech Delay Funnel -->
+  <div class="chart-card full-width">
+    <h2>Child Speech Delay (Ages 0–4): The Care Funnel</h2>
+    <p class="chart-desc">At every step — referral, diagnosis, treatment — children in franchise clinics receive dramatically fewer services. Data shown per 10,000 insured, 2022.</p>
+    <span class="stat-callout">8.4× treatment gap</span>
+    <div class="funnel-container">
+      <div class="funnel-col">
+        <h3 style="color: var(--direct);">Directly Operated</h3>
+        <div class="funnel-step">
+          <div class="funnel-bar" style="background: var(--direct); width: 100%;">980</div>
+          <div class="funnel-step-label">Referred for screening</div>
+        </div>
+        <div class="funnel-arrow">↓</div>
+        <div class="funnel-step">
+          <div class="funnel-bar" style="background: var(--direct); opacity:0.8; width: 98%;">960 (98%)</div>
+          <div class="funnel-step-label">Diagnosed with speech delay</div>
+        </div>
+        <div class="funnel-arrow">↓</div>
+        <div class="funnel-step">
+          <div class="funnel-bar" style="background: var(--direct); opacity:0.65; width: 95%;">933 (97%)</div>
+          <div class="funnel-step-label">Received treatment</div>
+        </div>
+      </div>
+      <div class="funnel-col">
+        <h3 style="color: var(--franchise);">Franchise (East Jerusalem)</h3>
+        <div class="funnel-step">
+          <div class="funnel-bar" style="background: var(--franchise); width: 34%;">337</div>
+          <div class="funnel-step-label">Referred for screening</div>
+        </div>
+        <div class="funnel-arrow">↓</div>
+        <div class="funnel-step">
+          <div class="funnel-bar" style="background: var(--franchise); opacity:0.8; width: 27%;">267 (79%)</div>
+          <div class="funnel-step-label">Diagnosed with speech delay</div>
+        </div>
+        <div class="funnel-arrow">↓</div>
+        <div class="funnel-step">
+          <div class="funnel-bar" style="background: var(--franchise); opacity:0.65; width: 11%;">111 (42%)</div>
+          <div class="funnel-step-label">Received treatment</div>
+        </div>
+      </div>
+    </div>
+    <div class="legend-row" style="margin-top: 1.25rem;">
+      <span class="direct">Directly operated (West Jerusalem)</span>
+      <span class="franchise">Franchise clinics (East Jerusalem)</span>
+    </div>
+  </div>
+
+  <!-- CHART 4: Gap Multiplier Summary -->
+  <div class="chart-card full-width">
+    <h2>How Wide Is the Gap?</h2>
+    <p class="chart-desc">Average service rate multiplier — how many times more likely a patient in a directly operated clinic is to receive the service vs. a franchise clinic patient. All differences are statistically significant.</p>
+    <div class="gap-bars" id="gapBars"></div>
+    <div class="legend-row" style="margin-top: 1.25rem;">
+      <span class="direct">Directly operated</span>
+      <span class="franchise">Franchise (East Jerusalem)</span>
+    </div>
+  </div>
+
+  <!-- CHART 5: Bone Density -->
+  <div class="chart-card">
+    <h2>Bone Density Screening — Women</h2>
+    <p class="chart-desc">Preventive screenings for women aged 55+ show a persistent 2:1 gap between clinic types.</p>
+    <span class="stat-callout">2.1× gap</span>
+    <div class="chart-container">
+      <canvas id="boneDensity"></canvas>
+    </div>
+  </div>
+
+  <!-- CHART 6: Motor Delay Physio -->
+  <div class="chart-card">
+    <h2>Motor Delay — Physiotherapy</h2>
+    <p class="chart-desc">Children diagnosed with motor delay in franchise clinics receive physiotherapy at 1/6th the rate.</p>
+    <span class="stat-callout">6.6× gap</span>
+    <div class="chart-container">
+      <canvas id="motorPhysio"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<p class="source-note">
+  Source: Forum for Health Equality in East Jerusalem, July 2025. Data from Clalit Health Services via FOI requests (2018–2022). All rates normalized per 10,000 insured members.
+</p>
+
+<script>
+  const COLORS = {
+    direct: '#d4563a',
+    directBg: 'rgba(212, 86, 58, 0.12)',
+    franchise: '#2978b5',
+    franchiseBg: 'rgba(41, 120, 181, 0.12)',
+    grid: '#e8e0d0',
+    tick: '#556a75',
+  };
+
+  const years = ['2018', '2019', '2020', '2021', '2022'];
+
+  const commonOptions = (title) => ({
+    responsive: true,
+    maintainAspectRatio: true,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1a2e3b',
+        titleFont: { family: 'Public Sans', size: 13 },
+        bodyFont: { family: 'Public Sans', size: 12 },
+        cornerRadius: 8,
+        padding: 10,
+        callbacks: {
+          label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()} per 10K`
+        }
+      }
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { font: { family: 'Public Sans', size: 12 }, color: COLORS.tick }
+      },
+      y: {
+        grid: { color: COLORS.grid },
+        ticks: { font: { family: 'Public Sans', size: 11 }, color: COLORS.tick },
+        beginAtZero: true,
+      }
+    }
+  });
+
+  function makeLineDatasets(directData, franchiseData) {
+    return [
+      {
+        label: 'Directly Operated',
+        data: directData,
+        borderColor: COLORS.direct,
+        backgroundColor: COLORS.directBg,
+        borderWidth: 2.5,
+        pointRadius: 5,
+        pointBackgroundColor: COLORS.direct,
+        fill: true,
+        tension: 0.3,
+      },
+      {
+        label: 'Franchise (East Jerusalem)',
+        data: franchiseData,
+        borderColor: COLORS.franchise,
+        backgroundColor: COLORS.franchiseBg,
+        borderWidth: 2.5,
+        pointRadius: 5,
+        pointBackgroundColor: COLORS.franchise,
+        fill: true,
+        tension: 0.3,
+      }
+    ];
+  }
+
+  // Chart 1: ER Adults
+  new Chart(document.getElementById('erAdults'), {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: makeLineDatasets(
+        [966.4, 965.4, 858.2, 999.3, 813.5],
+        [3257.1, 3063.5, 2737.0, 3121.0, 2810.5]
+      )
+    },
+    options: commonOptions()
+  });
+
+  // Chart 2: ER Minors
+  new Chart(document.getElementById('erMinors'), {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: makeLineDatasets(
+        [505.6, 484.9, 363.3, 429.1, 396.7],
+        [2141.3, 1930.2, 1371.6, 1666.1, 1719.8]
+      )
+    },
+    options: commonOptions()
+  });
+
+  // Chart 5: Bone Density
+  new Chart(document.getElementById('boneDensity'), {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: makeLineDatasets(
+        [1105.2, 1205.4, 974.7, 1178.5, 1277.5],
+        [478.1, 535.3, 489.4, 567.4, 680.4]
+      )
+    },
+    options: commonOptions()
+  });
+
+  // Chart 6: Motor Delay Physio
+  new Chart(document.getElementById('motorPhysio'), {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: makeLineDatasets(
+        [770.9, 771.6, 677.3, 737.0, 832.8],
+        [96.1, 109.5, 103.9, 127.1, 134.1]
+      )
+    },
+    options: commonOptions()
+  });
+
+  // Gap bars
+  const gapData = [
+    { label: 'Speech delay treatment\n(ages 0–4)', direct: 933.2, franchise: 111.0, mult: '8.4×' },
+    { label: 'Motor delay\nphysiotherapy', direct: 832.8, franchise: 134.1, mult: '6.6×' },
+    { label: 'Motor delay\noccupational therapy', direct: 399.3, franchise: 55.1, mult: '5.8×' },
+    { label: 'Speech delay\ndiagnosis', direct: 960.2, franchise: 267.8, mult: '5.3×' },
+    { label: 'ER referrals\n(children)', direct: 396.7, franchise: 1719.8, mult: '4.1×', inverted: true },
+    { label: 'ER referrals\n(adults)', direct: 813.5, franchise: 2810.5, mult: '3.3×', inverted: true },
+    { label: 'Speech delay\nreferrals', direct: 980.2, franchise: 337.6, mult: '2.9×' },
+    { label: 'Bone density\nscreening (women)', direct: 1277.5, franchise: 680.4, mult: '2.1×' },
+  ];
+
+  const barsEl = document.getElementById('gapBars');
+  const maxVal = Math.max(...gapData.map(d => Math.max(d.direct, d.franchise)));
+
+  gapData.forEach(d => {
+    const row = document.createElement('div');
+    row.className = 'gap-row';
+
+    const label = document.createElement('div');
+    label.className = 'gap-label';
+    label.textContent = d.label.replace('\n', ' ');
+
+    const track = document.createElement('div');
+    track.className = 'gap-track';
+
+    if (d.inverted) {
+      // For ER referrals, franchise is HIGHER (bad) — show franchise as the long bar
+      const fillF = document.createElement('div');
+      fillF.className = 'gap-fill-franchise';
+      fillF.style.width = (d.franchise / maxVal * 100) + '%';
+      fillF.textContent = Math.round(d.franchise).toLocaleString();
+
+      const fillD = document.createElement('div');
+      fillD.className = 'gap-fill-direct';
+      fillD.style.width = (d.direct / maxVal * 100) + '%';
+      fillD.style.zIndex = '2';
+      fillD.textContent = Math.round(d.direct).toLocaleString();
+
+      track.appendChild(fillF);
+      track.appendChild(fillD);
+    } else {
+      const fillD = document.createElement('div');
+      fillD.className = 'gap-fill-direct';
+      fillD.style.width = (d.direct / maxVal * 100) + '%';
+      fillD.textContent = Math.round(d.direct).toLocaleString();
+
+      const fillF = document.createElement('div');
+      fillF.className = 'gap-fill-franchise';
+      fillF.style.width = (d.franchise / maxVal * 100) + '%';
+      fillF.style.zIndex = '2';
+      fillF.textContent = Math.round(d.franchise).toLocaleString();
+
+      track.appendChild(fillD);
+      track.appendChild(fillF);
+    }
+
+    const mult = document.createElement('div');
+    mult.className = 'gap-multiplier';
+    mult.textContent = d.mult;
+
+    row.appendChild(label);
+    row.appendChild(track);
+    row.appendChild(mult);
+    barsEl.appendChild(row);
+  });
+</script>
+</body>
+</html>

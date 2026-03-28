@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Gap — Health Service Disparities Summary</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Public+Sans:wght@400;500;600;700&display=swap');
+  :root {
+    --ink: #1a2e3b; --ink-soft: #556a75;
+    --teal-dark: #0e6b6e; --teal-light: #e0f0ef;
+    --direct: #d4563a; --franchise: #2978b5;
+    --surface: #faf8f2;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Public Sans', sans-serif; background: var(--surface); color: var(--ink); padding: 2rem; }
+  .card { background: white; border-radius: 16px; padding: 2rem; border: 1px solid #d4cdb8; max-width: 900px; margin: 0 auto; }
+  h2 { font-family: 'Fraunces', serif; font-size: 1.4rem; margin-bottom: 0.25rem; }
+  .desc { font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 1.5rem; line-height: 1.5; }
+
+  .gap-bars { display: flex; flex-direction: column; gap: 1rem; }
+  .gap-row { display: flex; align-items: center; gap: 0.75rem; }
+  .gap-label { width: 180px; font-size: 0.82rem; color: var(--ink); text-align: right; flex-shrink: 0; line-height: 1.3; }
+  .gap-track { flex: 1; height: 38px; background: #f0ece2; border-radius: 8px; position: relative; overflow: hidden; }
+  .fill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 8px 0 0 8px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px; font-size: 0.72rem; font-weight: 600; color: white; transition: width 0.8s ease; }
+  .fill.d { background: var(--direct); opacity: 0.85; }
+  .fill.f { background: var(--franchise); opacity: 0.85; z-index: 2; }
+  .mult { width: 55px; text-align: center; font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.15rem; color: var(--teal-dark); flex-shrink: 0; }
+
+  .legend { display: flex; gap: 1.5rem; justify-content: center; margin-top: 1.25rem; font-size: 0.8rem; color: var(--ink-soft); }
+  .legend .d::before, .legend .f::before { content: ''; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+  .legend .d::before { background: var(--direct); }
+  .legend .f::before { background: var(--franchise); }
+  .source { text-align: center; font-size: 0.7rem; color: var(--ink-soft); margin-top: 1.5rem; }
+
+  @media (max-width: 600px) { .gap-label { width: 120px; font-size: 0.75rem; } }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>How Wide Is the Gap?</h2>
+  <p class="desc">Average service rate multiplier — how many times more service a patient in a directly operated clinic receives compared to a franchise clinic patient. Based on 2022 data. All differences are statistically significant.</p>
+
+  <div class="gap-bars" id="bars"></div>
+
+  <div class="legend"><span class="d">Directly operated</span><span class="f">Franchise (East Jerusalem)</span></div>
+</div>
+
+<p class="source">Source: Forum for Health Equality in East Jerusalem, July 2025. Clalit Health Services FOI data. Rates per 10,000 insured.</p>
+
+<script>
+const data = [
+  { label: 'Speech delay treatment (ages 0–4)', d: 933.2, f: 111.0, mult: '8.4×' },
+  { label: 'Motor delay — physiotherapy', d: 832.8, f: 134.1, mult: '6.6×' },
+  { label: 'Motor delay — occupational therapy', d: 399.3, f: 55.1, mult: '5.8×' },
+  { label: 'Speech delay diagnosis', d: 960.2, f: 267.8, mult: '5.3×' },
+  { label: 'ER referrals (children)', d: 396.7, f: 1719.8, mult: '4.1×', inv: true },
+  { label: 'ER referrals (adults)', d: 813.5, f: 2810.5, mult: '3.3×', inv: true },
+  { label: 'Speech delay referrals', d: 980.2, f: 337.6, mult: '2.9×' },
+  { label: 'Bone density screening (women)', d: 1277.5, f: 680.4, mult: '2.1×' },
+];
+
+const max = Math.max(...data.map(r => Math.max(r.d, r.f)));
+const el = document.getElementById('bars');
+
+data.forEach(r => {
+  const row = document.createElement('div'); row.className = 'gap-row';
+
+  const lbl = document.createElement('div'); lbl.className = 'gap-label'; lbl.textContent = r.label;
+
+  const track = document.createElement('div'); track.className = 'gap-track';
+
+  if (r.inv) {
+    // ER: franchise is higher (bad outcome)
+    const fBar = document.createElement('div'); fBar.className = 'fill f';
+    fBar.style.width = (r.f / max * 100) + '%'; fBar.textContent = Math.round(r.f).toLocaleString();
+    const dBar = document.createElement('div'); dBar.className = 'fill d';
+    dBar.style.width = (r.d / max * 100) + '%'; dBar.style.zIndex = '3'; dBar.textContent = Math.round(r.d).toLocaleString();
+    track.appendChild(fBar); track.appendChild(dBar);
+  } else {
+    const dBar = document.createElement('div'); dBar.className = 'fill d';
+    dBar.style.width = (r.d / max * 100) + '%'; dBar.textContent = Math.round(r.d).toLocaleString();
+    const fBar = document.createElement('div'); fBar.className = 'fill f';
+    fBar.style.width = (r.f / max * 100) + '%'; fBar.style.zIndex = '3'; fBar.textContent = Math.round(r.f).toLocaleString();
+    track.appendChild(dBar); track.appendChild(fBar);
+  }
+
+  const m = document.createElement('div'); m.className = 'mult'; m.textContent = r.mult;
+
+  row.appendChild(lbl); row.appendChild(track); row.appendChild(m);
+  el.appendChild(row);
+});
+</script>
+</body>
+</html>

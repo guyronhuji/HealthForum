@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Screening &amp; Treatment — East vs West Jerusalem</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Public+Sans:wght@400;500;600;700&display=swap');
+  :root {
+    --ink: #1a2e3b; --ink-soft: #556a75;
+    --teal-dark: #0e6b6e; --teal-light: #e0f0ef;
+    --direct: #d4563a; --franchise: #2978b5;
+    --surface: #faf8f2;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Public Sans', sans-serif; background: var(--surface); color: var(--ink); padding: 2rem; display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
+  .card { background: white; border-radius: 16px; padding: 1.75rem; border: 1px solid #d4cdb8; max-width: 540px; flex: 1; min-width: 320px; }
+  h2 { font-family: 'Fraunces', serif; font-size: 1.2rem; margin-bottom: 0.25rem; }
+  .desc { font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 1rem; line-height: 1.5; }
+  .stat { display: inline-block; background: var(--teal-light); color: var(--teal-dark); font-weight: 700; font-size: 0.82rem; padding: 0.25rem 0.65rem; border-radius: 999px; margin-bottom: 1rem; }
+  .legend { display: flex; gap: 1.5rem; justify-content: center; margin-top: 0.75rem; font-size: 0.78rem; color: var(--ink-soft); }
+  .legend .d::before, .legend .f::before { content: ''; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+  .legend .d::before { background: var(--direct); }
+  .legend .f::before { background: var(--franchise); }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Bone Density Screening — Women</h2>
+  <p class="desc">Preventive screenings for women aged 55+ show a persistent 2:1 gap between clinic types.</p>
+  <span class="stat">2.1× gap</span>
+  <canvas id="bone"></canvas>
+  <div class="legend"><span class="d">Directly operated</span><span class="f">Franchise (East Jerusalem)</span></div>
+</div>
+
+<div class="card">
+  <h2>Motor Delay — Physiotherapy</h2>
+  <p class="desc">Children diagnosed with motor delay in franchise clinics receive physiotherapy at 1/6th the rate of those in directly operated clinics.</p>
+  <span class="stat">6.6× gap</span>
+  <canvas id="motor"></canvas>
+  <div class="legend"><span class="d">Directly operated</span><span class="f">Franchise (East Jerusalem)</span></div>
+</div>
+
+<script>
+const C = { direct: '#d4563a', directBg: 'rgba(212,86,58,0.12)', franchise: '#2978b5', franchiseBg: 'rgba(41,120,181,0.12)', grid: '#e8e0d0', tick: '#556a75' };
+const years = ['2018','2019','2020','2021','2022'];
+const opts = {
+  responsive: true, interaction: { mode: 'index', intersect: false },
+  plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a2e3b', cornerRadius: 8, padding: 10, titleFont: { family: 'Public Sans' }, bodyFont: { family: 'Public Sans' }, callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()} per 10K` } } },
+  scales: { x: { grid: { display: false }, ticks: { font: { family: 'Public Sans', size: 12 }, color: C.tick } }, y: { grid: { color: C.grid }, ticks: { font: { family: 'Public Sans', size: 11 }, color: C.tick }, beginAtZero: true } }
+};
+function ds(d, f) {
+  return [
+    { label: 'Directly Operated', data: d, borderColor: C.direct, backgroundColor: C.directBg, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: C.direct, fill: true, tension: 0.3 },
+    { label: 'Franchise (East Jerusalem)', data: f, borderColor: C.franchise, backgroundColor: C.franchiseBg, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: C.franchise, fill: true, tension: 0.3 }
+  ];
+}
+new Chart(document.getElementById('bone'), { type: 'line', data: { labels: years, datasets: ds([1105.2,1205.4,974.7,1178.5,1277.5],[478.1,535.3,489.4,567.4,680.4]) }, options: opts });
+new Chart(document.getElementById('motor'), { type: 'line', data: { labels: years, datasets: ds([770.9,771.6,677.3,737.0,832.8],[96.1,109.5,103.9,127.1,134.1]) }, options: opts });
+</script>
+</body>
+</html>

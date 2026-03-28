@@ -27,6 +27,24 @@ if (!home) {
 const { Content } = await render(home);
 const navigation = navItems(allPages, lang);
 const alternates = alternateLinks(allPages, 'home');
+const chartSlides = [
+  {
+    title: 'Health service disparities summary',
+    src: withBase('/charts/health-forum-charts/chart-gap-summary.html'),
+  },
+  {
+    title: 'Emergency room referrals',
+    src: withBase('/charts/health-forum-charts/chart-er-referrals.html'),
+  },
+  {
+    title: 'Speech delay funnel',
+    src: withBase('/charts/health-forum-charts/chart-speech-funnel.html'),
+  },
+  {
+    title: 'Screening and physiotherapy trends',
+    src: withBase('/charts/health-forum-charts/chart-screening.html'),
+  },
+];
 ---
 
 <SiteLayout
@@ -47,6 +65,34 @@ const alternates = alternateLinks(allPages, 'home');
 
           <div class="hero-actions">
             <a href={withBase(home.data.secondaryCta.href)}>{home.data.secondaryCta.label}</a>
+          </div>
+
+          <div class="hero-chart-rotator" data-chart-rotator>
+            <div class="hero-chart-viewport">
+              {
+                chartSlides.map((chart, index) => (
+                  <iframe
+                    class={`hero-chart-frame${index === 0 ? ' is-active' : ''}`}
+                    src={chart.src}
+                    title={chart.title}
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                  ></iframe>
+                ))
+              }
+            </div>
+            <div class="hero-chart-nav">
+              {
+                chartSlides.map((_, index) => (
+                  <button
+                    type="button"
+                    class={`hero-chart-dot${index === 0 ? ' is-active' : ''}`}
+                    data-chart-dot={index}
+                    aria-label={`Show chart ${index + 1}`}
+                    aria-pressed={index === 0 ? 'true' : 'false'}
+                  ></button>
+                ))
+              }
+            </div>
           </div>
         </div>
 
@@ -94,3 +140,137 @@ const alternates = alternateLinks(allPages, 'home');
     {home.data.sourceNote && <p class="source-note">{home.data.sourceNote}</p>}
   </article>
 </SiteLayout>
+
+<script is:inline>
+  (() => {
+    const rotators = document.querySelectorAll('[data-chart-rotator]');
+    const switchEveryMs = 5000;
+    const transitionMs = 680;
+
+    for (const rotator of rotators) {
+      const viewport = rotator.querySelector('.hero-chart-viewport');
+      const frames = Array.from(rotator.querySelectorAll('.hero-chart-frame'));
+      const dots = Array.from(rotator.querySelectorAll('.hero-chart-dot'));
+      if (frames.length < 2) continue;
+
+      let currentIndex = 0;
+      let intervalId = null;
+      let isAnimating = false;
+      const measuredHeights = new Map();
+
+      const measureFrame = (frame) => {
+        try {
+          const doc = frame.contentDocument;
+          if (!doc) return;
+          const height = Math.max(
+            doc.body?.scrollHeight ?? 0,
+            doc.documentElement?.scrollHeight ?? 0,
+            doc.body?.offsetHeight ?? 0,
+            doc.documentElement?.offsetHeight ?? 0,
+          );
+          if (height > 0) measuredHeights.set(frame, height);
+        } catch {
+          // ignore read errors
+        }
+      };
+
+      const setViewportHeightForFrame = (frame) => {
+        if (!viewport) return;
+        measureFrame(frame);
+        const measured = measuredHeights.get(frame);
+        if (measured) {
+          // Keep a small breathing room so bottom labels aren't clipped.
+          viewport.style.height = `${measured + 8}px`;
+        }
+      };
+
+      const syncViewportHeight = () => {
+        if (!viewport) return;
+        const activeFrame = frames[currentIndex];
+        setViewportHeightForFrame(activeFrame);
+      };
+
+      const stopRotation = () => {
+        if (intervalId) {
+          window.clearInterval(intervalId);
+          intervalId = null;
+        }
+      };
+
+      const goTo = (nextIndex) => {
+        if (isAnimating) return;
+        if (nextIndex === currentIndex) return;
+        const currentFrame = frames[currentIndex];
+        const nextFrame = frames[nextIndex];
+
+        isAnimating = true;
+        nextFrame.classList.add('is-next');
+        setViewportHeightForFrame(nextFrame);
+
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            currentFrame.classList.add('is-leaving');
+            nextFrame.classList.add('is-entering');
+          });
+        });
+
+        dots[currentIndex]?.classList.remove('is-active');
+        dots[currentIndex]?.setAttribute('aria-pressed', 'false');
+        dots[nextIndex]?.classList.add('is-active');
+        dots[nextIndex]?.setAttribute('aria-pressed', 'true');
+
+        window.setTimeout(() => {
+          currentFrame.classList.remove('is-active', 'is-leaving');
+          nextFrame.classList.remove('is-next', 'is-entering');
+          nextFrame.classList.add('is-active');
+          currentIndex = nextIndex;
+          syncViewportHeight();
+          window.setTimeout(syncViewportHeight, 900);
+          isAnimating = false;
+        }, transitionMs);
+      };
+
+      const goToNext = () => {
+        const nextIndex = (currentIndex + 1) % frames.length;
+        goTo(nextIndex);
+      };
+
+      const startRotation = () => {
+        stopRotation();
+        intervalId = window.setInterval(goToNext, switchEveryMs);
+      };
+
+      frames.forEach((frame) => {
+        frame.addEventListener('load', () => {
+          measureFrame(frame);
+          if (frame === frames[currentIndex]) {
+            setViewportHeightForFrame(frame);
+          }
+          syncViewportHeight();
+        });
+      });
+
+      dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+          goTo(index);
+          startRotation();
+        });
+      });
+
+      rotator.addEventListener('mouseenter', stopRotation);
+      rotator.addEventListener('mouseleave', startRotation);
+      rotator.addEventListener('focusin', stopRotation);
+      rotator.addEventListener('focusout', startRotation);
+      window.addEventListener('resize', syncViewportHeight);
+
+      document.addEventListener('visibilitychange', () => {
+        if (document.hidden) stopRotation();
+        else startRotation();
+      });
+
+      syncViewportHeight();
+      window.setTimeout(syncViewportHeight, 1200);
+      startRotation();
+    }
+  })();
+</script>

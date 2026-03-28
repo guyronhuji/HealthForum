@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { locales, pathFor, type LocaleCode } from '../lib/site';
+import { locales, pathFor, type LocaleCode, withBase } from '../lib/site';
 
 interface NavItem {
   slug: string;
@@ -24,6 +24,44 @@ interface Props {
 
 const { lang, title, description, navItems, currentSlug, alternateLinks } = Astro.props;
 const locale = locales[lang];
+const affiliateLogos = [
+  {
+    key: 'attaa',
+    name: 'Attaa Center',
+    href: 'http://www.attaacenter.org/',
+    src: withBase('/logos/affiliates/attaa-center.jpg'),
+  },
+  {
+    key: 'jicc',
+    name: 'Jerusalem Intercultural Center (JICC)',
+    href: 'https://jicc.org.il/',
+    src: withBase('/logos/affiliates/jicc.png'),
+  },
+  {
+    key: 'ladaat',
+    name: 'Ladaat',
+    href: 'https://ladaat.org.il/',
+    src: withBase('/logos/affiliates/ladaat.svg'),
+  },
+  {
+    key: 'phr',
+    name: 'Physicians for Human Rights Israel',
+    href: 'https://phr.org.il/en/',
+    src: withBase('/logos/affiliates/phr-israel.png'),
+  },
+  {
+    key: 'acri',
+    name: 'Association for Civil Rights in Israel (ACRI)',
+    href: 'https://www.acri.org.il/en/',
+    src: withBase('/logos/affiliates/acri.png'),
+  },
+  {
+    key: 'iramim',
+    name: 'Ir Amim',
+    href: 'https://www.ir-amim.org.il/en',
+    src: withBase('/logos/affiliates/ir-amim.svg'),
+  },
+];
 ---
 
 <!doctype html>
@@ -66,6 +104,22 @@ const locale = locales[lang];
           alternateLinks.map((item) => (
             <a href={item.href} data-active={item.lang === lang ? 'true' : 'false'}>
               {locales[item.lang].nativeLabel}
+            </a>
+          ))
+        }
+      </div>
+
+      <div class="header-affiliates" aria-label="Forum affiliates">
+        {
+          affiliateLogos.map((logo) => (
+            <a href={logo.href} target="_blank" rel="noreferrer noopener" class="affiliate-logo-link">
+              <img
+                src={logo.src}
+                alt={logo.name}
+                title={logo.name}
+                class={`affiliate-logo affiliate-logo-${logo.key}`}
+                loading="lazy"
+              />
             </a>
           ))
         }

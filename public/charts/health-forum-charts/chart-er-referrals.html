@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ER Referrals — East vs West Jerusalem</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Public+Sans:wght@400;500;600;700&display=swap');
+  :root {
+    --sand-1: #f5edd6; --ink: #1a2e3b; --ink-soft: #556a75;
+    --teal: #1a8a8a; --teal-dark: #0e6b6e; --teal-light: #e0f0ef;
+    --direct: #d4563a; --franchise: #2978b5;
+    --surface: #faf8f2;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Public Sans', sans-serif; background: var(--surface); color: var(--ink); padding: 2rem; }
+  .card { background: white; border-radius: 16px; padding: 1.75rem; border: 1px solid #d4cdb8; max-width: 600px; margin: 0 auto 2rem; }
+  h2 { font-family: 'Fraunces', serif; font-size: 1.3rem; margin-bottom: 0.25rem; }
+  .desc { font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 1rem; line-height: 1.5; }
+  .stat { display: inline-block; background: var(--teal-light); color: var(--teal-dark); font-weight: 700; font-size: 0.85rem; padding: 0.3rem 0.75rem; border-radius: 999px; margin-bottom: 1rem; }
+  .legend { display: flex; gap: 1.5rem; justify-content: center; margin-top: 0.75rem; font-size: 0.8rem; color: var(--ink-soft); }
+  .legend .d::before, .legend .f::before { content: ''; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+  .legend .d::before { background: var(--direct); }
+  .legend .f::before { background: var(--franchise); }
+  .source { text-align: center; font-size: 0.7rem; color: var(--ink-soft); margin-top: 1.5rem; }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>ER Referrals — Adults</h2>
+  <p class="desc">Adults in franchise clinics are referred to the ER at 3–4× the rate of those in directly operated clinics, every single year.</p>
+  <span class="stat">Avg. 3.3× gap</span>
+  <canvas id="erAdults"></canvas>
+  <div class="legend"><span class="d">Directly operated</span><span class="f">Franchise (East Jerusalem)</span></div>
+</div>
+
+<div class="card">
+  <h2>ER Referrals — Children</h2>
+  <p class="desc">Children in franchise clinics are sent to the ER at 4× the rate, suggesting primary care cannot handle routine pediatric cases.</p>
+  <span class="stat">Avg. 4.1× gap</span>
+  <canvas id="erMinors"></canvas>
+  <div class="legend"><span class="d">Directly operated</span><span class="f">Franchise (East Jerusalem)</span></div>
+</div>
+
+<p class="source">Source: Forum for Health Equality in East Jerusalem, July 2025. Clalit Health Services FOI data (2018–2022). Rates per 10,000 insured.</p>
+
+<script>
+const C = { direct: '#d4563a', directBg: 'rgba(212,86,58,0.12)', franchise: '#2978b5', franchiseBg: 'rgba(41,120,181,0.12)', grid: '#e8e0d0', tick: '#556a75' };
+const years = ['2018','2019','2020','2021','2022'];
+const opts = {
+  responsive: true, interaction: { mode: 'index', intersect: false },
+  plugins: { legend: { display: false }, tooltip: { backgroundColor: '#1a2e3b', cornerRadius: 8, padding: 10, titleFont: { family: 'Public Sans' }, bodyFont: { family: 'Public Sans' }, callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toLocaleString()} per 10K` } } },
+  scales: { x: { grid: { display: false }, ticks: { font: { family: 'Public Sans', size: 12 }, color: C.tick } }, y: { grid: { color: C.grid }, ticks: { font: { family: 'Public Sans', size: 11 }, color: C.tick }, beginAtZero: true } }
+};
+function ds(d, f) {
+  return [
+    { label: 'Directly Operated', data: d, borderColor: C.direct, backgroundColor: C.directBg, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: C.direct, fill: true, tension: 0.3 },
+    { label: 'Franchise (East Jerusalem)', data: f, borderColor: C.franchise, backgroundColor: C.franchiseBg, borderWidth: 2.5, pointRadius: 5, pointBackgroundColor: C.franchise, fill: true, tension: 0.3 }
+  ];
+}
+new Chart(document.getElementById('erAdults'), { type: 'line', data: { labels: years, datasets: ds([966.4,965.4,858.2,999.3,813.5],[3257.1,3063.5,2737.0,3121.0,2810.5]) }, options: opts });
+new Chart(document.getElementById('erMinors'), { type: 'line', data: { labels: years, datasets: ds([505.6,484.9,363.3,429.1,396.7],[2141.3,1930.2,1371.6,1666.1,1719.8]) }, options: opts });
+</script>
+</body>
+</html>

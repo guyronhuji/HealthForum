@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speech Delay Care Funnel — East vs West Jerusalem</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@400;700;900&family=Public+Sans:wght@400;500;600;700&display=swap');
+  :root {
+    --ink: #1a2e3b; --ink-soft: #556a75;
+    --teal-dark: #0e6b6e; --teal-light: #e0f0ef;
+    --direct: #d4563a; --franchise: #2978b5;
+    --surface: #faf8f2;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Public Sans', sans-serif; background: var(--surface); color: var(--ink); padding: 2rem; }
+  .card { background: white; border-radius: 16px; padding: 2rem; border: 1px solid #d4cdb8; max-width: 800px; margin: 0 auto; }
+  h2 { font-family: 'Fraunces', serif; font-size: 1.4rem; margin-bottom: 0.25rem; }
+  .desc { font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 1rem; line-height: 1.5; }
+  .stat { display: inline-block; background: var(--teal-light); color: var(--teal-dark); font-weight: 700; font-size: 0.85rem; padding: 0.3rem 0.75rem; border-radius: 999px; margin-bottom: 1.5rem; }
+
+  .funnel { display: flex; gap: 3rem; justify-content: center; }
+  .funnel-col { text-align: center; flex: 1; max-width: 280px; }
+  .funnel-col h3 { font-family: 'Fraunces', serif; font-size: 1.05rem; margin-bottom: 1.25rem; }
+  .step { margin-bottom: 0.4rem; }
+  .bar {
+    height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 0.95rem; margin: 0 auto;
+    min-width: 96px;
+    padding: 0 10px;
+    white-space: nowrap;
+    transition: width 0.6s ease;
+  }
+  .bar-meta { font-weight: 500; font-size: 0.8rem; margin-left: 4px; }
+  .step-label { font-size: 0.78rem; color: var(--ink-soft); margin-top: 4px; margin-bottom: 0.15rem; }
+  .arrow { color: #bbb; font-size: 1.4rem; margin: 0.2rem 0; }
+  .legend { display: flex; gap: 1.5rem; justify-content: center; margin-top: 1.5rem; font-size: 0.8rem; color: var(--ink-soft); }
+  .legend .d::before, .legend .f::before { content: ''; display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+  .legend .d::before { background: var(--direct); }
+  .legend .f::before { background: var(--franchise); }
+  .source { text-align: center; font-size: 0.7rem; color: var(--ink-soft); margin-top: 1.5rem; }
+
+  @media (max-width: 600px) {
+    .funnel { flex-direction: column; align-items: center; }
+    .bar { min-width: 90px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <h2>Child Speech Delay (Ages 0–4): The Care Funnel</h2>
+  <p class="desc">At every step — referral, diagnosis, treatment — children in franchise clinics receive dramatically fewer services. 2022 data, per 10,000 insured.</p>
+  <span class="stat">8.4× treatment gap</span>
+
+  <div class="funnel">
+    <div class="funnel-col">
+      <h3 style="color: var(--direct);">Directly Operated</h3>
+      <div class="step">
+        <div class="bar" style="background: var(--direct); width: 100%;">980</div>
+        <div class="step-label">Referred for screening</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="step">
+        <div class="bar" style="background: var(--direct); opacity: 0.82; width: 98%;">960 <span class="bar-meta">(98%)</span></div>
+        <div class="step-label">Diagnosed with speech delay</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="step">
+        <div class="bar" style="background: var(--direct); opacity: 0.65; width: 95%;">933 <span class="bar-meta">(97%)</span></div>
+        <div class="step-label">Received treatment</div>
+      </div>
+    </div>
+
+    <div class="funnel-col">
+      <h3 style="color: var(--franchise);">Franchise (East Jerusalem)</h3>
+      <div class="step">
+        <div class="bar" style="background: var(--franchise); width: 34%;">337</div>
+        <div class="step-label">Referred for screening</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="step">
+        <div class="bar" style="background: var(--franchise); opacity: 0.82; width: 27%;">267 <span class="bar-meta">(79%)</span></div>
+        <div class="step-label">Diagnosed with speech delay</div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="step">
+        <div class="bar" style="background: var(--franchise); opacity: 0.65; width: 11%;">111 <span class="bar-meta">(42%)</span></div>
+        <div class="step-label">Received treatment</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="legend"><span class="d">Directly operated (West Jerusalem)</span><span class="f">Franchise clinics (East Jerusalem)</span></div>
+</div>
+
+<p class="source">Source: Forum for Health Equality in East Jerusalem, July 2025. Clalit Health Services FOI data. Rates per 10,000 insured.</p>
+
+</body>
+</html>
