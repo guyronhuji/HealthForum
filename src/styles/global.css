@@ -273,7 +273,6 @@ body.lang-ar .page-title {
   background: color-mix(in oklab, white 84%, var(--sand-1));
   height: clamp(360px, 36vw, 560px);
   min-height: 0;
-  transition: height 420ms ease;
 }
 
 .hero-chart-frame {

@@ -174,20 +174,18 @@ const chartSlides = [
         }
       };
 
-      const setViewportHeightForFrame = (frame) => {
+      const syncFixedViewportHeight = () => {
         if (!viewport) return;
-        measureFrame(frame);
-        const measured = measuredHeights.get(frame);
-        if (measured) {
+        let tallest = 0;
+        frames.forEach((frame) => {
+          measureFrame(frame);
+          const measured = measuredHeights.get(frame) ?? 0;
+          if (measured > tallest) tallest = measured;
+        });
+        if (tallest > 0) {
           // Keep a small breathing room so bottom labels aren't clipped.
-          viewport.style.height = `${measured + 8}px`;
+          viewport.style.height = `${tallest + 8}px`;
         }
-      };
-
-      const syncViewportHeight = () => {
-        if (!viewport) return;
-        const activeFrame = frames[currentIndex];
-        setViewportHeightForFrame(activeFrame);
       };
 
       const stopRotation = () => {
@@ -205,7 +203,6 @@ const chartSlides = [
 
         isAnimating = true;
         nextFrame.classList.add('is-next');
-        setViewportHeightForFrame(nextFrame);
 
         window.requestAnimationFrame(() => {
           window.requestAnimationFrame(() => {
@@ -224,8 +221,6 @@ const chartSlides = [
           nextFrame.classList.remove('is-next', 'is-entering');
           nextFrame.classList.add('is-active');
           currentIndex = nextIndex;
-          syncViewportHeight();
-          window.setTimeout(syncViewportHeight, 900);
           isAnimating = false;
         }, transitionMs);
       };
@@ -243,10 +238,7 @@ const chartSlides = [
       frames.forEach((frame) => {
         frame.addEventListener('load', () => {
           measureFrame(frame);
-          if (frame === frames[currentIndex]) {
-            setViewportHeightForFrame(frame);
-          }
-          syncViewportHeight();
+          syncFixedViewportHeight();
         });
       });
 
@@ -261,15 +253,15 @@ const chartSlides = [
       rotator.addEventListener('mouseleave', startRotation);
       rotator.addEventListener('focusin', stopRotation);
       rotator.addEventListener('focusout', startRotation);
-      window.addEventListener('resize', syncViewportHeight);
+      window.addEventListener('resize', syncFixedViewportHeight);
 
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) stopRotation();
         else startRotation();
       });
 
-      syncViewportHeight();
-      window.setTimeout(syncViewportHeight, 1200);
+      syncFixedViewportHeight();
+      window.setTimeout(syncFixedViewportHeight, 1200);
       startRotation();
     }
   })();
