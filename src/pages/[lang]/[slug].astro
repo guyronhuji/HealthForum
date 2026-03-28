@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { alternateLinks, navItems } from '../../lib/content';
-import { isLocale, type LocaleCode } from '../../lib/site';
+import { isLocale, type LocaleCode, withBase } from '../../lib/site';
 
 export async function getStaticPaths() {
   const pages = await getCollection('pages', ({ data }) => !data.draft && data.pageSlug !== 'home');
@@ -51,8 +51,8 @@ const alternates = alternateLinks(allPages, page.data.pageSlug);
       <h1 class="page-title">{page.data.heroHeading}</h1>
       <p>{page.data.heroBody}</p>
       <div class="hero-actions">
-        <a href={page.data.primaryCta.href}>{page.data.primaryCta.label}</a>
-        <a href={page.data.secondaryCta.href}>{page.data.secondaryCta.label}</a>
+        <a href={withBase(page.data.primaryCta.href)}>{page.data.primaryCta.label}</a>
+        <a href={withBase(page.data.secondaryCta.href)}>{page.data.secondaryCta.label}</a>
       </div>
     </section>
 

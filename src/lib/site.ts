@@ -61,17 +61,27 @@ export const locales = {
 export type LocaleCode = keyof typeof locales;
 
 export const supportedLocales = Object.keys(locales) as LocaleCode[];
+const BASE_URL = import.meta.env.BASE_URL ?? '/';
+const BASE_PREFIX = BASE_URL === '/' ? '' : BASE_URL.replace(/\/$/, '');
 
 export function isLocale(value: string | undefined): value is LocaleCode {
   return Boolean(value && value in locales);
 }
 
+export function withBase(href: string): string {
+  if (!href) return href;
+  if (/^(https?:|mailto:|tel:|#)/i.test(href)) return href;
+  if (!href.startsWith('/')) return href;
+  if (BASE_PREFIX && href.startsWith(`${BASE_PREFIX}/`)) return href;
+  return `${BASE_PREFIX}${href}`;
+}
+
 export function pathFor(lang: LocaleCode, slug: string): string {
   if (slug === 'home') {
-    return `/${lang}/`;
+    return withBase(`/${lang}/`);
   }
 
-  return `/${lang}/${slug}/`;
+  return withBase(`/${lang}/${slug}/`);
 }
 
 export function pageKey(slug: string) {

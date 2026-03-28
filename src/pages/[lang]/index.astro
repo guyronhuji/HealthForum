@@ -2,7 +2,7 @@
 import { getCollection, render } from 'astro:content';
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import { alternateLinks, navItems } from '../../lib/content';
-import { isLocale, supportedLocales, type LocaleCode } from '../../lib/site';
+import { isLocale, supportedLocales, type LocaleCode, withBase } from '../../lib/site';
 
 export async function getStaticPaths() {
   return supportedLocales.map((lang) => ({ params: { lang } }));
@@ -46,7 +46,7 @@ const alternates = alternateLinks(allPages, 'home');
           <p>{home.data.heroBody}</p>
 
           <div class="hero-actions">
-            <a href={home.data.secondaryCta.href}>{home.data.secondaryCta.label}</a>
+            <a href={withBase(home.data.secondaryCta.href)}>{home.data.secondaryCta.label}</a>
           </div>
         </div>
 

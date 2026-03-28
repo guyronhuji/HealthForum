@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { locales, type LocaleCode } from '../lib/site';
+import { locales, pathFor, type LocaleCode } from '../lib/site';
 
 interface NavItem {
   slug: string;
@@ -46,7 +46,7 @@ const locale = locales[lang];
   <body class={`lang-${lang}`}>
     <div class="backdrop" aria-hidden="true"></div>
     <header class="site-header">
-      <a class="brand" href={`/${lang}/`}>
+      <a class="brand" href={pathFor(lang, 'home')}>
         <span class="brand-mark">{locale.brandMark}</span>
         <span>{locale.footer}</span>
       </a>
