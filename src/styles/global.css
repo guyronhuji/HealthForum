@@ -105,15 +105,15 @@ main,
 
 .affiliate-logo {
   display: block;
-  height: 1.425rem;
+  height: 2.85rem;
   width: auto;
-  max-width: min(19.5vw, 132px);
+  max-width: min(39vw, 264px);
   object-fit: contain;
 }
 
 .affiliate-logo-phr {
-  height: 1.2rem;
-  max-width: min(24vw, 180px);
+  height: 2.4rem;
+  max-width: min(48vw, 360px);
 }
 
 .brand {
