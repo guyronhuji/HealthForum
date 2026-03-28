@@ -36,7 +36,6 @@ partners:
   - Strengthen Ministry of Health oversight over contracted clinics
   - Improve language accessibility and culturally adapted services
 sourceNote: All indicators are attributed to the linked sources below and should be updated as new publications are released.
-lastUpdated: "2026-03-28"
 ---
 ## Source list for this website
 

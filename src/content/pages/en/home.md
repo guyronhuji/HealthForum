@@ -39,7 +39,6 @@ partners:
   - Health professionals and researchers
   - East Jerusalem community activists
 sourceNote: Key facts are based on published forum and partner materials linked in this site.
-lastUpdated: "2026-03-28"
 ---
 ## Why this site exists
 

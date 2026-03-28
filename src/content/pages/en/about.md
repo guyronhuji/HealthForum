@@ -43,7 +43,6 @@ partners:
   - Data publication and public communication
 sourceNote: Timeline items are compiled from JICC project documentation and
   forum partner publications.
-lastUpdated: 2026-03-28
 ---
 ## Development arc
 

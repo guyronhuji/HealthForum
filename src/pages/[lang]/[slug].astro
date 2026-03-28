@@ -117,6 +117,6 @@ const alternates = alternateLinks(allPages, page.data.pageSlug);
       <Content />
     </section>
 
-    <p class="source-note">{page.data.sourceNote} · {page.data.lastUpdated}</p>
+    {page.data.sourceNote && <p class="source-note">{page.data.sourceNote}</p>}
   </article>
 </SiteLayout>

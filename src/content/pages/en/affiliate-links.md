@@ -41,7 +41,6 @@ partners:
   - Association for Civil Rights in Israel (ACRI)
   - Ir Amim
 sourceNote: Updated March 2026
-lastUpdated: 2026-03-28
 ---
 ## Affiliate Organizations
 

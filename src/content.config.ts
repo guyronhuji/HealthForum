@@ -32,10 +32,6 @@ const updateTimelineSchema = z.object({
   summary: z.string(),
 });
 
-const lastUpdatedSchema = z
-  .union([z.string(), z.date()])
-  .transform((value) => (value instanceof Date ? value.toISOString().slice(0, 10) : value));
-
 const pages = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/pages' }),
   schema: z.object({
@@ -58,8 +54,7 @@ const pages = defineCollection({
     updateTimeline: z.array(updateTimelineSchema).optional(),
     partnersTitle: z.string(),
     partners: z.array(z.string()).min(1),
-    sourceNote: z.string(),
-    lastUpdated: lastUpdatedSchema,
+    sourceNote: z.string().optional(),
     draft: z.boolean().default(false),
   }),
 });
