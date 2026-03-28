@@ -3,8 +3,8 @@ lang: en
 pageSlug: about
 title: About the Forum
 navLabel: About
-description: Timeline and operating model of the Forum for Health Equality in
-  East Jerusalem.
+description: "Timeline and operating model of the Forum for Health Equality in
+  East Jerusalem. "
 heroKicker: Coalition Story
 heroHeading: Inaugurated in 2014, still focused on structural change.
 heroBody: The forum was initiated by Dr. Yael Assor and brings together eight
