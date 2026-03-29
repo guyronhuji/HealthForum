@@ -45,6 +45,34 @@ const chartSlides = [
     src: withBase('/charts/health-forum-charts/chart-screening.html'),
   },
 ];
+const whyThisMatters = {
+  en: {
+    label: 'Why This Matters',
+    body: 'Families in East Jerusalem face preventable barriers to timely care. The forum brings evidence, legal advocacy, and community voices together to close these gaps.',
+    quote: 'When primary care is hard to access, small problems become emergency visits.',
+    cta: 'Read the full 2025 findings →',
+  },
+  he: {
+    label: 'למה זה חשוב',
+    body: 'משפחות במזרח ירושלים מתמודדות עם חסמים שניתן למנוע בדרך לטיפול בזמן. הפורום מחבר בין נתונים, פעילות משפטית וקול קהילתי כדי לצמצם את הפערים.',
+    quote: 'כשקשה להגיע לרפואת קהילה, בעיות קטנות הופכות לביקורים במיון.',
+    cta: 'לקריאת ממצאי 2025 המלאים ←',
+  },
+  ar: {
+    label: 'لماذا هذا مهم',
+    body: 'تواجه العائلات في القدس الشرقية عوائق يمكن تجنبها أمام الحصول على رعاية في الوقت المناسب. يجمع المنتدى بين الأدلة والمناصرة القانونية وصوت المجتمع لتقليص هذه الفجوات.',
+    quote: 'عندما يصعب الوصول إلى الرعاية الأولية، تتحول المشكلات الصغيرة إلى زيارات طارئة.',
+    cta: 'قراءة نتائج 2025 الكاملة ←',
+  },
+} satisfies Record<
+  LocaleCode,
+  {
+    label: string;
+    body: string;
+    quote: string;
+    cta: string;
+  }
+>;
 ---
 
 <SiteLayout
@@ -66,6 +94,15 @@ const chartSlides = [
           <div class="hero-actions">
             <a href={withBase(home.data.secondaryCta.href)}>{home.data.secondaryCta.label}</a>
           </div>
+
+          <section class="why-matters" aria-label={whyThisMatters[lang].label}>
+            <p class="why-matters-kicker">{whyThisMatters[lang].label}</p>
+            <p class="why-matters-body">{whyThisMatters[lang].body}</p>
+            <blockquote class="why-matters-quote">“{whyThisMatters[lang].quote}”</blockquote>
+            <a class="why-matters-link" href={withBase(`/${lang}/reports/`)}>
+              {whyThisMatters[lang].cta}
+            </a>
+          </section>
         </div>
 
         <div class="hero-chart-column">

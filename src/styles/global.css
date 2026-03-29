@@ -261,6 +261,54 @@ body.lang-ar .page-title {
   color: var(--teal-dark);
 }
 
+.why-matters {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.65rem;
+  padding: 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, white 88%, var(--sand-1));
+}
+
+.why-matters-kicker {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--teal-dark);
+  font-weight: 700;
+}
+
+.why-matters-body {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.why-matters-quote {
+  margin: 0;
+  padding-inline-start: 0.65rem;
+  border-inline-start: 3px solid color-mix(in oklab, var(--teal-dark) 58%, white);
+  color: var(--ink);
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.why-matters-link {
+  justify-self: start;
+  color: var(--teal-dark);
+  font-weight: 700;
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in oklab, var(--teal-dark) 45%, transparent);
+}
+
+.why-matters-link:hover {
+  color: var(--ink);
+  border-bottom-color: var(--teal-dark);
+}
+
 .hero-chart-rotator {
   margin-top: 1rem;
 }
