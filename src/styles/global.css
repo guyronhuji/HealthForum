@@ -128,7 +128,7 @@ main,
 }
 
 .forum-logo {
-  height: clamp(2.05rem, 1.92rem + 0.48vw, 2.45rem);
+  height: clamp(2.46rem, 2.3rem + 0.58vw, 2.94rem);
   width: auto;
   object-fit: contain;
   flex: 0 0 auto;
