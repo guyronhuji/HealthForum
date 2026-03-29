@@ -24,6 +24,16 @@ interface Props {
 
 const { lang, title, description, navItems, currentSlug, alternateLinks } = Astro.props;
 const locale = locales[lang];
+const navAriaLabel = {
+  en: 'Primary',
+  he: 'ניווט ראשי',
+  ar: 'التنقل الرئيسي',
+}[lang];
+const affiliatesAriaLabel = {
+  en: 'Forum affiliates',
+  he: 'ארגוני הפורום',
+  ar: 'جهات المنتدى الشريكة',
+}[lang];
 const affiliateLogos = [
   {
     key: 'attaa',
@@ -89,7 +99,7 @@ const affiliateLogos = [
         <span>{locale.footer}</span>
       </a>
 
-      <nav class="site-nav" aria-label="Primary">
+      <nav class="site-nav" aria-label={navAriaLabel}>
         {
           navItems.map((item) => (
             <a href={item.href} data-active={item.slug === currentSlug ? 'true' : 'false'}>
@@ -109,7 +119,7 @@ const affiliateLogos = [
         }
       </div>
 
-      <div class="header-affiliates" aria-label="Forum affiliates">
+      <div class="header-affiliates" aria-label={affiliatesAriaLabel}>
         {
           affiliateLogos.map((logo) => (
             <a href={logo.href} target="_blank" rel="noreferrer noopener" class="affiliate-logo-link">

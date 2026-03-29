@@ -27,24 +27,41 @@ if (!home) {
 const { Content } = await render(home);
 const navigation = navItems(allPages, lang);
 const alternates = alternateLinks(allPages, 'home');
-const chartSlides = [
-  {
-    title: 'Health service disparities summary',
-    src: withBase('/charts/health-forum-charts/chart-gap-summary.html'),
-  },
-  {
-    title: 'Emergency room referrals',
-    src: withBase('/charts/health-forum-charts/chart-er-referrals.html'),
-  },
-  {
-    title: 'Speech delay funnel',
-    src: withBase('/charts/health-forum-charts/chart-speech-funnel.html'),
-  },
-  {
-    title: 'Screening and physiotherapy trends',
-    src: withBase('/charts/health-forum-charts/chart-screening.html'),
-  },
+const chartSlideTitles = {
+  en: [
+    'Health service disparities summary',
+    'Emergency room referrals',
+    'Speech delay funnel',
+    'Screening and physiotherapy trends',
+  ],
+  he: [
+    'סיכום פערים בשירותי בריאות',
+    'הפניות לחדר מיון',
+    'משפך טיפול בעיכוב שפתי',
+    'מגמות בסקר ובפיזיותרפיה',
+  ],
+  ar: [
+    'ملخص فجوات خدمات الصحة',
+    'إحالات غرف الطوارئ',
+    'مسار علاج تأخر النطق',
+    'اتجاهات الفحوصات والعلاج الفيزيائي',
+  ],
+} satisfies Record<LocaleCode, string[]>;
+const chartSlideSources = [
+  '/charts/health-forum-charts/chart-gap-summary.html',
+  '/charts/health-forum-charts/chart-er-referrals.html',
+  '/charts/health-forum-charts/chart-speech-funnel.html',
+  '/charts/health-forum-charts/chart-screening.html',
 ];
+const chartSlides = chartSlideSources.map((src, index) => ({
+  title: chartSlideTitles[lang][index],
+  src: withBase(src),
+}));
+const chartControlLabel = {
+  en: 'Show chart',
+  he: 'הצג תרשים',
+  ar: 'عرض الرسم',
+}[lang];
 const whyThisMatters = {
   en: {
     label: 'Why This Matters',
@@ -126,7 +143,7 @@ const whyThisMatters = {
                     type="button"
                     class={`hero-chart-dot${index === 0 ? ' is-active' : ''}`}
                     data-chart-dot={index}
-                    aria-label={`Show chart ${index + 1}`}
+                    aria-label={`${chartControlLabel} ${index + 1}`}
                     aria-pressed={index === 0 ? 'true' : 'false'}
                   ></button>
                 ))
