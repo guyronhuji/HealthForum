@@ -25,7 +25,8 @@ interface Props {
 const { lang, title, description, navItems, currentSlug, alternateLinks } = Astro.props;
 const locale = locales[lang];
 const forumLogoSrc = withBase('/logos/forum-logo.png');
-const forumFaviconSrc = withBase('/logos/forum-logo-favicon.png');
+const forumFavicon32Src = withBase('/logos/forum-logo-favicon-32.png');
+const forumFavicon16Src = withBase('/logos/forum-logo-favicon-16.png');
 const navAriaLabel = {
   en: 'Primary',
   he: 'ניווט ראשי',
@@ -83,9 +84,10 @@ const affiliateLogos = [
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
-    <link rel="icon" type="image/png" href={forumFaviconSrc} />
-    <link rel="shortcut icon" type="image/png" href={forumFaviconSrc} />
-    <link rel="icon" href={withBase('/favicon.ico')} />
+    <link rel="icon" type="image/png" sizes="32x32" href={forumFavicon32Src} />
+    <link rel="icon" type="image/png" sizes="16x16" href={forumFavicon16Src} />
+    <link rel="shortcut icon" type="image/png" href={forumFavicon32Src} />
+    <link rel="apple-touch-icon" href={forumFavicon32Src} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
