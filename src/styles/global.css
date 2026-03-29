@@ -265,6 +265,10 @@ body.lang-ar .page-title {
   margin-top: 1rem;
 }
 
+.hero-chart-column .hero-chart-rotator {
+  margin-top: 0;
+}
+
 .hero-chart-viewport {
   position: relative;
   overflow: hidden;
