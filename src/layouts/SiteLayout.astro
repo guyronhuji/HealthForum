@@ -24,6 +24,7 @@ interface Props {
 
 const { lang, title, description, navItems, currentSlug, alternateLinks } = Astro.props;
 const locale = locales[lang];
+const forumLogoSrc = withBase('/logos/forum-logo.png');
 const navAriaLabel = {
   en: 'Primary',
   he: 'ניווט ראשי',
@@ -81,8 +82,9 @@ const affiliateLogos = [
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <meta name="generator" content={Astro.generator} />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" type="image/png" href={forumLogoSrc} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    <link rel="icon" href={withBase('/favicon.ico')} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -95,8 +97,8 @@ const affiliateLogos = [
     <div class="backdrop" aria-hidden="true"></div>
     <header class="site-header">
       <a class="brand" href={pathFor(lang, 'home')}>
-        <span class="brand-mark">{locale.brandMark}</span>
-        <span>{locale.footer}</span>
+        <img class="forum-logo" src={forumLogoSrc} alt={locale.footer} />
+        <span class="brand-name">{locale.footer}</span>
       </a>
 
       <nav class="site-nav" aria-label={navAriaLabel}>
