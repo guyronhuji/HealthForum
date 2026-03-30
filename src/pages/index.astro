@@ -3,24 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="refresh" content="0; url=en/" />
+    <meta http-equiv="refresh" content="0; url=/en/" />
     <title>Redirecting...</title>
   </head>
   <body>
     <p>Redirecting...</p>
     <script>
-      const langs = Array.isArray(navigator.languages) ? navigator.languages : [navigator.language];
-      const first = (langs[0] || '').toLowerCase();
-      const pathname = window.location.pathname.endsWith('/')
-        ? window.location.pathname
-        : `${window.location.pathname}/`;
-      const base = `${window.location.origin}${pathname}`;
-
-      let langPath = 'en/';
-      if (first.startsWith('he')) langPath = 'he/';
-      if (first.startsWith('ar')) langPath = 'ar/';
-
-      const target = new URL(langPath, base).toString();
+      const target = `${window.location.origin}/en/`;
       window.location.replace(target);
     </script>
   </body>
