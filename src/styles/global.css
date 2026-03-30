@@ -116,6 +116,10 @@ main,
   max-width: min(48vw, 360px);
 }
 
+.affiliate-logo-wacmaan {
+  height: 4.275rem;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
