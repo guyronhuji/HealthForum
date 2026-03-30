@@ -17,7 +17,7 @@ secondaryCta:
   label: Data and Advocacy
   href: /en/reports/
 stats:
-  - value: "7"
+  - value: "8"
     label: Organizations listed as members
     source: WAC-MAAN forum update page (Oct 28, 2025)
   - value: "2"
@@ -41,6 +41,7 @@ partners:
   - Association for Civil Rights in Israel (ACRI)
   - Ir Amim
   - WAC-MAAN
+  - Merkazim
 sourceNote: Updated March 2026
 ---
 ## Affiliate Organizations
@@ -52,6 +53,7 @@ sourceNote: Updated March 2026
 - [Association for Civil Rights in Israel (ACRI)](https://www.acri.org.il/en/)
 - [Ir Amim](https://www.ir-amim.org.il/en)
 - [WAC-MAAN](https://wac-maan.org.il/home-eng/)
+- [Merkazim](https://www.merkazim.org/)
 
 
 
