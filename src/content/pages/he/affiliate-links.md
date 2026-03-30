@@ -14,7 +14,7 @@ secondaryCta:
   label: נתונים ומדיניות
   href: /he/reports/
 stats:
-  - value: "6"
+  - value: "7"
     label: ארגונים המופיעים ברשימה כחברים
     source: עמוד עדכון הפורום ב-WAC-MAAN (28 באוקטובר 2025)
   - value: "2"
@@ -35,6 +35,7 @@ partners:
   - רופאים לזכויות אדם
   - האגודה לזכויות האזרח
   - עיר עמים
+  - מען - WAC-MAAN
 sourceNote: עודכן במרץ 2026
 ---
 ## ארגונים שותפים
@@ -45,3 +46,4 @@ sourceNote: עודכן במרץ 2026
 - [רופאים לזכויות אדם ישראל](https://phr.org.il/en/)
 - [האגודה לזכויות האזרח בישראל (ACRI)](https://www.acri.org.il/en/)
 - [עיר עמים](https://www.ir-amim.org.il/en)
+- [מען - WAC-MAAN](https://wac-maan.org.il/home-eng/)

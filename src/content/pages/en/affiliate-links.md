@@ -17,7 +17,7 @@ secondaryCta:
   label: Data and Advocacy
   href: /en/reports/
 stats:
-  - value: "6"
+  - value: "7"
     label: Organizations listed as members
     source: WAC-MAAN forum update page (Oct 28, 2025)
   - value: "2"
@@ -40,6 +40,7 @@ partners:
   - Physicians for Human Rights Israel
   - Association for Civil Rights in Israel (ACRI)
   - Ir Amim
+  - WAC-MAAN
 sourceNote: Updated March 2026
 ---
 ## Affiliate Organizations
@@ -50,6 +51,7 @@ sourceNote: Updated March 2026
 - [Physicians for Human Rights Israel](https://phr.org.il/en/)
 - [Association for Civil Rights in Israel (ACRI)](https://www.acri.org.il/en/)
 - [Ir Amim](https://www.ir-amim.org.il/en)
+- [WAC-MAAN](https://wac-maan.org.il/home-eng/)
 
 
 

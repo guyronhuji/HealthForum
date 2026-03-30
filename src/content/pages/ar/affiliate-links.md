@@ -14,7 +14,7 @@ secondaryCta:
   label: البيانات والمناصرة
   href: /ar/reports/
 stats:
-  - value: "6"
+  - value: "7"
     label: منظمات مدرجة كأعضاء
     source: صفحة تحديث المنتدى على WAC-MAAN (28 أكتوبر 2025)
   - value: "2"
@@ -35,6 +35,7 @@ partners:
   - أطباء لحقوق الإنسان - إسرائيل
   - جمعية حقوق المواطن في إسرائيل (ACRI)
   - عير عميم
+  - معًا - WAC-MAAN
 sourceNote: تم التحديث في مارس 2026
 ---
 ## المنظمات الشريكة
@@ -45,3 +46,4 @@ sourceNote: تم التحديث في مارس 2026
 - [أطباء لحقوق الإنسان - إسرائيل](https://phr.org.il/en/)
 - [جمعية حقوق المواطن في إسرائيل (ACRI)](https://www.acri.org.il/en/)
 - [عير عميم](https://www.ir-amim.org.il/en)
+- [معًا - WAC-MAAN](https://wac-maan.org.il/home-eng/)
