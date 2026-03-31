@@ -88,6 +88,7 @@ export function pageKey(slug: string) {
   if (slug === 'home') return 'home';
   if (slug === 'about') return 'about';
   if (slug === 'reports') return 'reports';
+  if (slug === 'media') return 'media';
   if (slug === 'affiliate-links') return 'affiliate-links';
   return null;
 }

@@ -6,7 +6,7 @@ export function pagesForLang(entries: CollectionEntry<'pages'>[], lang: LocaleCo
   return entries
     .filter((entry) => entry.data.lang === lang && !entry.data.draft)
     .sort((a, b) => {
-      const order = ['home', 'about', 'reports', 'affiliate-links'];
+      const order = ['home', 'about', 'reports', 'media', 'affiliate-links'];
       return order.indexOf(a.data.pageSlug) - order.indexOf(b.data.pageSlug);
     });
 }
