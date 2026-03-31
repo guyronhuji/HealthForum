@@ -37,6 +37,17 @@ const affiliatesAriaLabel = {
   he: 'ארגוני הפורום',
   ar: 'جهات المنتدى الشريكة',
 }[lang];
+const useAffiliateCarousel = currentSlug === 'home';
+const affiliatePrevLabel = {
+  en: 'Previous affiliates',
+  he: 'ארגונים קודמים',
+  ar: 'الجهات السابقة',
+}[lang];
+const affiliateNextLabel = {
+  en: 'Next affiliates',
+  he: 'ארגונים הבאים',
+  ar: 'الجهات التالية',
+}[lang];
 const affiliateLogos = [
   {
     key: 'attaa',
@@ -142,21 +153,57 @@ const affiliateLogos = [
         }
       </div>
 
-      <div class="header-affiliates" aria-label={affiliatesAriaLabel}>
-        {
-          affiliateLogos.map((logo) => (
-            <a href={logo.href} target="_blank" rel="noreferrer noopener" class="affiliate-logo-link">
-              <img
-                src={logo.src}
-                alt={logo.name}
-                title={logo.name}
-                class={`affiliate-logo affiliate-logo-${logo.key}`}
-                loading="lazy"
-              />
-            </a>
-          ))
-        }
-      </div>
+      {
+        useAffiliateCarousel ? (
+          <div
+            class="header-affiliates header-affiliates-carousel"
+            aria-label={affiliatesAriaLabel}
+            data-affiliate-carousel
+          >
+            <button type="button" class="affiliate-carousel-btn" data-affiliate-prev aria-label={affiliatePrevLabel}>
+              ‹
+            </button>
+            <div class="affiliate-carousel-viewport">
+              <div class="affiliate-carousel-track" data-affiliate-track>
+                {
+                  affiliateLogos.map((logo) => (
+                    <div class="affiliate-logo-slide" data-affiliate-slide>
+                      <a href={logo.href} target="_blank" rel="noreferrer noopener" class="affiliate-logo-link">
+                        <img
+                          src={logo.src}
+                          alt={logo.name}
+                          title={logo.name}
+                          class={`affiliate-logo affiliate-logo-${logo.key}`}
+                          loading="lazy"
+                        />
+                      </a>
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+            <button type="button" class="affiliate-carousel-btn" data-affiliate-next aria-label={affiliateNextLabel}>
+              ›
+            </button>
+          </div>
+        ) : (
+          <div class="header-affiliates" aria-label={affiliatesAriaLabel}>
+            {
+              affiliateLogos.map((logo) => (
+                <a href={logo.href} target="_blank" rel="noreferrer noopener" class="affiliate-logo-link">
+                  <img
+                    src={logo.src}
+                    alt={logo.name}
+                    title={logo.name}
+                    class={`affiliate-logo affiliate-logo-${logo.key}`}
+                    loading="lazy"
+                  />
+                </a>
+              ))
+            }
+          </div>
+        )
+      }
     </header>
 
     <main>
@@ -167,5 +214,121 @@ const affiliateLogos = [
       <p>{locale.footer}</p>
       <p>{new Date().getFullYear()} · Astro + Pages CMS + GitHub Pages</p>
     </footer>
+
+    <script is:inline>
+      (() => {
+        const carousels = document.querySelectorAll('[data-affiliate-carousel]');
+        if (!carousels.length) return;
+        const speedPxPerSecond = 30;
+
+        for (const carousel of carousels) {
+          const track = carousel.querySelector('[data-affiliate-track]');
+          const slides = Array.from(carousel.querySelectorAll('[data-affiliate-slide]'));
+          const prevBtn = carousel.querySelector('[data-affiliate-prev]');
+          const nextBtn = carousel.querySelector('[data-affiliate-next]');
+          if (!track || slides.length < 2) continue;
+
+          let rafId = 0;
+          let lastTs = 0;
+          let offset = 0;
+          let cycleWidth = 0;
+          let stepPx = 0;
+          let resizeTimer = 0;
+
+          const getGap = () => {
+            const styles = getComputedStyle(track);
+            return Number.parseFloat(styles.columnGap || styles.gap || '0') || 0;
+          };
+
+          const setTransform = () => {
+            track.style.transform = `translateX(-${offset}px)`;
+          };
+
+          const normalizeOffset = () => {
+            if (cycleWidth <= 0) {
+              offset = 0;
+              return;
+            }
+            offset %= cycleWidth;
+            if (offset < 0) offset += cycleWidth;
+          };
+
+          const removeClones = () => {
+            track.querySelectorAll('[data-affiliate-clone]').forEach((node) => node.remove());
+          };
+
+          const measureAndClone = (preserveRatio = true) => {
+            const previousRatio = cycleWidth > 0 ? offset / cycleWidth : 0;
+            removeClones();
+            const originals = Array.from(track.querySelectorAll('[data-affiliate-slide]'));
+            const gap = getGap();
+
+            const totalWidth = originals.reduce((sum, slide) => sum + slide.getBoundingClientRect().width, 0);
+            cycleWidth = totalWidth + gap * originals.length;
+            stepPx = (originals[0]?.getBoundingClientRect().width ?? 0) + gap;
+
+            originals.forEach((slide) => {
+              const clone = slide.cloneNode(true);
+              clone.setAttribute('data-affiliate-clone', 'true');
+              track.appendChild(clone);
+            });
+
+            if (preserveRatio && cycleWidth > 0) {
+              offset = previousRatio * cycleWidth;
+            }
+            normalizeOffset();
+            setTransform();
+          };
+
+          const tick = (ts) => {
+            if (!lastTs) lastTs = ts;
+            const dt = (ts - lastTs) / 1000;
+            lastTs = ts;
+            offset += speedPxPerSecond * dt;
+            normalizeOffset();
+            setTransform();
+            rafId = window.requestAnimationFrame(tick);
+          };
+
+          const start = () => {
+            if (rafId || cycleWidth <= 0) return;
+            lastTs = 0;
+            rafId = window.requestAnimationFrame(tick);
+          };
+
+          const stop = () => {
+            if (!rafId) return;
+            window.cancelAnimationFrame(rafId);
+            rafId = 0;
+          };
+
+          const nudge = (direction) => {
+            if (stepPx <= 0) return;
+            offset += direction * stepPx;
+            normalizeOffset();
+            setTransform();
+          };
+
+          prevBtn?.addEventListener('click', () => nudge(-1));
+          nextBtn?.addEventListener('click', () => nudge(1));
+
+          window.addEventListener('resize', () => {
+            window.clearTimeout(resizeTimer);
+            resizeTimer = window.setTimeout(() => {
+              measureAndClone(true);
+              start();
+            }, 120);
+          });
+
+          document.addEventListener('visibilitychange', () => {
+            if (document.hidden) stop();
+            else start();
+          });
+
+          measureAndClone(false);
+          start();
+        }
+      })();
+    </script>
   </body>
 </html>
