@@ -41,6 +41,7 @@ sourceNote: Last reviewed March 31, 2026.
 - [ACRI (English): More supervision needed for health clinics in East Jerusalem](https://www.english.acri.org.il/post/more-supervision-needed-for-health-clinics-in-east-jerusalem)
 - [ACRI (Hebrew): forum findings and supervision gaps](https://www.acri.org.il/post/_1289)
 - [WAC-MAAN (Hebrew): forum update page and publication references](https://wac-maan.org.il/east-jerusalem-35/)
+- [Forum source documents and publications →](/en/reports/#downloads)
 
 ## Update protocol
 

@@ -41,6 +41,7 @@ sourceNote: נבדק לאחרונה ב-31 במרץ 2026.
 - [ACRI באנגלית: צורך בפיקוח מוגבר על מרפאות במזרח ירושלים](https://www.english.acri.org.il/post/more-supervision-needed-for-health-clinics-in-east-jerusalem)
 - [ACRI בעברית: ממצאי הפורום ופערי הפיקוח](https://www.acri.org.il/post/_1289)
 - [WAC-MAAN: עמוד עדכון הפורום וקישורים לפרסומים](https://wac-maan.org.il/east-jerusalem-35/)
+- [מסמכי מקור ופרסומי הפורום ←](/he/reports/#downloads)
 
 ## נוהל עדכון
 

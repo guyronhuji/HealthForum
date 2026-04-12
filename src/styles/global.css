@@ -563,6 +563,31 @@ body.lang-ar .page-title {
   color: var(--teal-dark);
 }
 
+.markdown .downloads-callout {
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in oklab, var(--teal-dark) 45%, white);
+  border-radius: var(--radius-md);
+  background: color-mix(in oklab, var(--teal) 10%, white);
+}
+
+.markdown .downloads-callout h3 {
+  margin-top: 0;
+}
+
+.markdown .downloads-callout p {
+  margin-top: 0.5rem;
+}
+
+.markdown .downloads-callout ul {
+  margin-bottom: 0;
+}
+
+.markdown .file-meta {
+  font-weight: 700;
+  color: color-mix(in oklab, var(--clay) 70%, var(--ink));
+}
+
 .source-note {
   margin: 0;
   color: var(--ink-soft);

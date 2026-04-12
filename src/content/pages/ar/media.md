@@ -41,6 +41,7 @@ sourceNote: آخر مراجعة في 31 مارس 2026.
 - [ACRI (بالإنجليزية): حاجة إلى رقابة أكبر على عيادات القدس الشرقية](https://www.english.acri.org.il/post/more-supervision-needed-for-health-clinics-in-east-jerusalem)
 - [ACRI (بالعبرية): نتائج المنتدى وفجوات الرقابة](https://www.acri.org.il/post/_1289)
 - [WAC-MAAN (بالعبرية): صفحة تحديث المنتدى وروابط منشورات](https://wac-maan.org.il/east-jerusalem-35/)
+- [وثائق المصدر ومنشورات المنتدى ←](/ar/reports/#downloads)
 
 ## آلية التحديث
 
